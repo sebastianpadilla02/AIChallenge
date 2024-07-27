@@ -91,6 +91,6 @@ if __name__ == "__main__":
     }
 
     gemini = Gemini(api_key, db_config)
-    message = "Que cliente gasto mas entre todos? Revisa bien los calculos y dame el nombre del cliente bien"
+    message = "Dame un codigo para sumar dos numeros en python"
     response = gemini.send_message(message)
     print(response)

@@ -10,17 +10,14 @@ class Stephany:
         self.db = Database(db_config)
         self.configure()
 
-    def initialize(self):
+    def configure(self):
         # Configuramos nuestra instancia del modelo con nuestra API key
         genai.configure(api_key=self.api_key)
+
         # Inicializamos el modelo
-        self.model = genai.GenerativeModel('gemini-pro', )
-        # Iniciamos el chat
-        self.chat = self.model.start_chat(self.history)
+        self.model = genai.GenerativeModel('gemini-pro')
 
-
-    def get_historiy(self):
-        return self.chat.history
+        self.chat = self.model.start_chat(history = self.history,enable_automatic_function_calling = True)
 
     # Esta función se usa para dejar el formato de la respuesta en un formato legible
     def to_markdown(self, text):
@@ -29,19 +26,28 @@ class Stephany:
 
     # Enviamos un mensaje y recibimos la respuesta
     def send_message(self, message):
-        if "productos" in message.lower():
-            products = self.get_products()
-            return self.format_table(products)
-        elif "clientes" in message.lower():
-            clients = self.get_clients()
-            return self.format_table(clients)
-        elif "órdenes" in message.lower():
-            orders = self.get_orders()
-            return self.format_table(orders)
-        else:
-            response = self.model.chat(message)
-            formatted_response = self.to_markdown(response.text)
-            return formatted_response
+        # Extraemos la información relevante de la base de datos
+        context = self.get_context()
+        
+        # Incluimos el contexto en el mensaje
+        full_message = f"{context}\n\n{message}"
+        
+        # Enviamos el mensaje a Gemini
+        response = self.chat.send_message(full_message)
+        formatted_response = self.to_markdown(response.text)
+        return formatted_response
+
+    # Función para obtener contexto de la base de datos
+    def get_context(self):
+        products = self.get_products()
+        clients = self.get_clients()
+        orders = self.get_orders()
+
+        context = "Productos:\n" + self.format_table(products)
+        context += "\n\nClientes:\n" + self.format_table(clients)
+        context += "\n\nÓrdenes:\n" + self.format_table(orders)
+        
+        return context
 
     # Función para obtener productos
     def get_products(self):
@@ -58,16 +64,16 @@ class Stephany:
         query = "SELECT * FROM data.Orders"
         return self.db.execute_query(query)
 
-    # Función para formatear las tablas en Markdown
+    # Función para formatear las tablas en texto plano
     def format_table(self, data):
         if not data:
             return "No se encontraron resultados."
         
-        headers = [i[0] for i in self.db.cursor.description]
+        headers = data[0].keys()
         table = "| " + " | ".join(headers) + " |\n"
         table += "|---" * len(headers) + "|\n"
         for row in data:
-            table += "| " + " | ".join(map(str, row)) + " |\n"
+            table += "| " + " | ".join(map(str, row.values())) + " |\n"
         
         return table
 
@@ -83,7 +89,7 @@ if __name__ == "__main__":
         'port': '13214'
     }
 
-    stephany = Stephany(api_key, db_config)
-    message = "Que productos valen mas?"
-    response = Stephany.send_message(message)
+    chatbot = Stephany(api_key, db_config)
+    message = "Que cliente gasto mas entre todos? Revisa bien los calculos y dame el nombre del cliente bien"
+    response = chatbot.send_message(message)
     print(response)
