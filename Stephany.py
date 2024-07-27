@@ -1,9 +1,8 @@
 import google.generativeai as genai
 import textwrap
-import logging
 from Database import Database
 
-class Gemini:
+class Stephany:
 
     def __init__(self, api_key, db_config):
         self.api_key = api_key
@@ -11,12 +10,17 @@ class Gemini:
         self.db = Database(db_config)
         self.configure()
 
-    def configure(self):
+    def initialize(self):
         # Configuramos nuestra instancia del modelo con nuestra API key
         genai.configure(api_key=self.api_key)
-
         # Inicializamos el modelo
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel('gemini-pro', )
+        # Iniciamos el chat
+        self.chat = self.model.start_chat(self.history)
+
+
+    def get_historiy(self):
+        return self.chat.history
 
     # Esta función se usa para dejar el formato de la respuesta en un formato legible
     def to_markdown(self, text):
@@ -79,7 +83,7 @@ if __name__ == "__main__":
         'port': '13214'
     }
 
-    gemini = Gemini(api_key, db_config)
+    stephany = Stephany(api_key, db_config)
     message = "Que productos valen mas?"
-    response = gemini.send_message(message)
+    response = Stephany.send_message(message)
     print(response)

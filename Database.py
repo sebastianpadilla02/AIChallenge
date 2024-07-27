@@ -9,7 +9,7 @@ class Database:
     def connect(self):
         try:
             self.conn = mysql.connector.connect(**self.config)
-            self.cursor = self.conn.cursor()
+            self.cursor = self.conn.cursor(dictionary=True)  # Usamos dictionary=True para obtener los resultados como diccionarios
             print("Conexión a la base de datos exitosa")
         except Exception as e:
             print(f"Error al conectar a la base de datos: {e}")
