@@ -1,6 +1,5 @@
 from Stephany import Stephany
 
-
 api_key = 'AIzaSyDR-yzVIRiFoQqWsdT3tNX2BcR_T4TcAQQ'
 
 db_config = {
@@ -12,6 +11,7 @@ db_config = {
 }
 
 chatbot = Stephany(api_key, db_config)
-message = "Que cliente gasto mas entre todos? Revisa bien los calculos y dame el nombre del cliente bien"
-response = chatbot.send_message(message)
-print(response)
+while(True):
+    message = input()
+    response = chatbot.send_message(message)
+    print(response)
