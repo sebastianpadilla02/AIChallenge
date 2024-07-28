@@ -41,14 +41,8 @@ class Stephany:
     def format_history(self):
         formatted_history = []
         for entry in self.history:
-            formatted_history.append({
-                'parts': [{'text': entry['user']}],
-                'role': 'user'
-            })
-            formatted_history.append({
-                'parts': [{'text': entry['gemini']}],
-                'role': 'model'
-            })
+            formatted_history.append({'text': f"User: {entry['user']}"})
+            formatted_history.append({'text': f"Gemini: {entry['gemini']}"})
         return formatted_history
 
     # Esta función se usa para dejar el formato de la respuesta en un formato legible
@@ -84,10 +78,10 @@ class Stephany:
         try:
             # Enviamos el mensaje a Gemini
             response = self.chat.send_message(full_message)
-            formatted_response = self.to_markdown(response.text)
+            formatted_response = response.text
 
             # Guardamos el mensaje y la respuesta en el historial
-            self.history.append({'user': full_message, 'gemini': formatted_response})
+            self.history.append({'user': message, 'gemini': formatted_response})
             self.save_history()
 
             return formatted_response

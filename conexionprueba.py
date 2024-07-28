@@ -24,3 +24,4 @@ formatted_response = to_markdown(response.text)
 
 # Imprimimos la respuesta formateada
 print(formatted_response)
+print(chat.history)
