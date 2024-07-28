@@ -1,10 +1,10 @@
  | AIChallenge ✉️ |
 
 --> Integrantes
-• Sebastian Arteta Padilla 👨‍💻
-• Jose Carlos Bermudez Castro 👨‍💻
-• Sebastián Maldonado Gastelbondo 👨‍💻
-• Belsy Sofia Pedrozo Sanchez 👩‍💼
+• Sebastian Arteta Padilla
+• Jose Carlos Bermudez Castro
+• Sebastián Maldonado Gastelbondo
+• Belsy Sofia Pedrozo Sanchez
 
 
 --> 💖 Chatbot Stephanie para LuthyMakeup 💖
