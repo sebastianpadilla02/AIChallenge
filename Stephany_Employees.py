@@ -4,9 +4,9 @@ from Database import Database
 import json
 import os
 
-class Stephany:
+class Stephany2:
 
-    def __init__(self, api_key, db_config, history_file='chat_history.json'):
+    def __init__(self, api_key, db_config, history_file='chat_employees_history.json'):
         self.first = True
         self.api_key = api_key
         self.db = Database(db_config)
@@ -62,16 +62,20 @@ class Stephany:
             # Extraemos la información relevante de la base de datos
             context = self.get_context()
 
+            context_luthymakeup = ("Hola, voy a usarte como parte de un chatbot para mi negocio de maquillaje llamado LuthyMakeup")
+            
             # Decirle que no se salga del contexto
             context_luthymakeup = (
-                "Hola, voy a usarte como parte de un chatbot para mi negocio de maquillaje llamado LuthyMakeup"
-                "(con sede en Barranquilla, Colombia), quiero que de las preguntas que te haga solo contestes las que "
-                "tienen que ver con maquillaje, recomendaciones, tiempos de entrega y cosas que se relacionen con la "
-                "información de tablas que te envío a continuación, como tiempos de entrega, costos, y otra info que "
-                "este en las tablas y se relacione a las tablas y al sistema del negocio. Si la pregunta que te hago "
-                "es ambigua, pideme más información sobre lo que quiero preguntar. Si la pregunta que te hago no "
-                "tiene nada que ver en lo absoluto con la empresa, la informacion o algo relacionado, por favor dime: "
-                "No puedo responder a esa pregunta"
+                "Hola, voy a usarte como parte de un chatbot para mi negocio de maquillaje llamado LuthyMakeup "
+                "(con sede en Barranquilla, Colombia). En esta sección, solo responderás preguntas y solicitudes relacionadas con los empleados "
+                "de la empresa y la información operativa que se encuentra en las tablas que te enviaré. Este chat está enfocado en la parte "
+                "operativa de la empresa y sus funcionalidades. "
+
+                "Importante: "
+                "1. Si la pregunta que te hago es ambigua, di: 'Dame más información para darte una respuesta concreta.' "
+                "2. Si la pregunta que te hago no tiene nada que ver con la empresa o el enfoque del chatbot, por favor di: 'No puedo responder a esa pregunta.' "
+
+                "Solo responde preguntas relacionadas con la empresa y la información de las tablas que te proporcionaré."
             )
 
             # Incluimos el contexto en el mensaje
@@ -91,7 +95,6 @@ class Stephany:
             self.save_history()
 
             return formatted_response
-        
         except genai.types.generation_types.StopCandidateException as e:
             print("La respuesta fue detenida por motivos de seguridad:", e)
             return "Lo siento, no puedo proporcionar una respuesta a esa pregunta, intenta preguntar de otra manera."
@@ -101,10 +104,12 @@ class Stephany:
         products = self.get_products()
         clients = self.get_clients()
         orders = self.get_orders()
+        employees = self.get_employees()
 
         context = "Productos:\n" + self.format_table(products)
         context += "\n\nClientes:\n" + self.format_table(clients)
         context += "\n\nÓrdenes:\n" + self.format_table(orders)
+        context += "\n\nEmpleados:\n" + self.format_table(employees)
 
         return context
 
@@ -121,6 +126,11 @@ class Stephany:
     # Función para obtener órdenes
     def get_orders(self):
         query = "SELECT * FROM data.Orders_2"
+        return self.db.execute_query(query)
+
+    # Función para obtener empleados
+    def get_employees(self):
+        query = "SELECT * FROM data.Employees_3"
         return self.db.execute_query(query)
 
     # Función para formatear las tablas en texto plano

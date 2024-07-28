@@ -22,12 +22,13 @@ try:
     cursor.execute('USE data;')
     # Crear la tabla
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS `Orders` (
+        CREATE TABLE IF NOT EXISTS `Orders_2` (
             `OrderID` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `ClientID` int NOT NULL,
             `Date` DateTime,
             `ProductID` int NOT NULL,
-            `Quantity` int
+            `Quantity` int,
+            `EmployeeID` int NOT NULL
         );
     ''')
     connection.commit()

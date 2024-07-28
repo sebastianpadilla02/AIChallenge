@@ -17,7 +17,7 @@ connection = pymysql.connect(
 )
 
 # Leer el archivo CSV, asumiendo que la primera fila contiene los nombres de las columnas
-csv_file_path = 'Order.csv'
+csv_file_path = 'database/Order.csv'
 df = pd.read_csv(csv_file_path, sep=';', skiprows=0)
 # Convertir el formato de fecha al formato esperado por MySQL
 df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y').dt.strftime('%Y-%m-%d')
@@ -28,9 +28,9 @@ try:
     cursor = connection.cursor()
     for index, row in df.iterrows():
         cursor.execute('''
-            INSERT INTO data.Orders (ClientID, Date, ProductID, Quantity)
-            VALUES (%s, %s, %s, %s);
-        ''', (row['ClientID'], row['Date'], row['ProductID'], row['Quantity']))
+            INSERT INTO data.Orders_2 (ClientID, Date, ProductID, Quantity, EmployeeID)
+            VALUES (%s, %s, %s, %s, %s);
+        ''', (row['ClientID'], row['Date'], row['ProductID'], row['Quantity'], row['EmployeeID']))
     connection.commit()
     print("Data inserted successfully.")
 except pymysql.MySQLError as e:

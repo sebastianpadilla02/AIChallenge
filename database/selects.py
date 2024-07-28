@@ -19,7 +19,7 @@ try:
     # Cambiar al esquema
     cursor.execute('USE data;')
     # Seleccionar todos los datos de la tabla Clients
-    cursor.execute('SELECT * FROM Products;')
+    cursor.execute('SELECT * FROM Orders_2;')
     # Obtener todos los resultados
     results = cursor.fetchall()
     
