@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Registro de Cuenta{% endblock %}
+
+{% block content %}
+<div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 border-blue-800 border-4 p-12 rounded-xl">
+    <h1 class="mb-6 text-3xl">Registro de Vendedor</h1>
+
+    <form method="post" action=".">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="inline-block mb-2">Horario de Atención</label><br>
+            {{ form.horario }}
+        </div>
+
+        <div class="mb-3">
+            <label class="inline-block mb-2">Número de Teléfono</label><br>
+            {{ form.contacto }}
+        </div>
+
+        <div class="mb-3">
+            <label class="inline-block mb-2">Cuenta de Instagram</label><br>
+            {{ form.instagram }}
+        </div>
+
+        {% if form.errors or form.non_field_errors %}
+            <div class="mb-3 p-6 bg-green-100 rounded-xl">
+                {% for field in form %}
+                    {{ field.errors }}
+                {% endfor %}
+
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <button class="py-4 px-8 text-lg bg-green-500 hover:bg-green-700 rounded-xl text-white">Registrar</button>
+    </form>
+</div>
+{% endblock %}

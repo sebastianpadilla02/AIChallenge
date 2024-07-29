@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+
+    <div class="card justify-items-center">
+        <div id="messageFormeight" class="card-footer">
+            <h2 class="my-3 mb-12 text-2xl text-center">LuthyMakeup</h2>
+        </div>
+
+        
+        <h5 class="my-3 mb-32 text-1/2 text-center">Una Experiencia Mágica</h2>
+        
+        <div class= "my-12 mx-auto justify-items-center">
+            <a href="{% url 'core:chat' %}" class="text-center px-12  py-6 mb-32 text-lg font-semibold bg-pink-700 text-white centered rounded-xl hover:bg-pink-600">Iniciar</a>
+        </div>
+    </div>
+
+{% endblock %}

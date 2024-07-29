@@ -1,0 +1,75 @@
+<!doctype html>
+{% load static %}
+
+<html>
+    
+
+    <head>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+
+        <link rel="stylesheet" href="/css/mi_estilo.css?v=<?php echo(rand()); ?>" />
+        <script src="/js/mi_script.js?v=<?php echo(rand()); ?>"></script>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <title>{% block title %}{% endblock %} | LuthyMakeup</title>
+    </head>
+
+    <body>
+        <nav class="py-6 px-6 flex justify-between items-center border-b border-blue-200">
+
+            <div class="col-span-1">
+                <a href="/" class="text-xl text-white font-semibold">LuthyMakeup</a>
+            </div>
+            
+
+            <div class="col-span-2">
+
+            </div>
+
+            <div class="col-span-1">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'core:chat' %}" class="px-6 py-3 text-lg font-semibold bg-pink-500 text-white rounded-xl hover:bg-pink-400">Chat</a>
+                    <a href="{% url 'core:logout' %}" class="px-6 py-3 text-lg font-semibold bg-pink-600 text-white rounded-xl hover:bg-pink-700">Salir</a>
+                {% else %}
+                    <a href="{% url 'core:signup' %}" class="px-6 py-3 text-lg font-semibold bg-pink-500 text-white rounded-xl hover:bg-pink-400">Registrarse</a>
+                    <a href="{% url 'core:login' %}" class="px-6 py-3 text-lg font-semibold bg-pink-600 text-white rounded-xl hover:bg-pink-700">Ingresar</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="px-6 py-6">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <footer class="py-6 px-6 grid grid-cols-3 bg-pink-800">
+
+            <div class="w-150 p-8 grid justify-items-center">
+                <img src="{% static 'media/page_images/Dinero.jpg' %}" class = "py-2 px-2" alt="Dinero">
+                <h2 class="text-center font-semibold text-gray-100">Rápido y Eficiente</h2>
+                <p class="text-center text-gray-300">Desde nuestro chat virtual podrás saber más de nuestros productos y hacer tu pedido en cuestión de segundos</p>
+            </div>
+
+            <div class="w-150 p-8 grid justify-items-center">
+                <img src="{% static 'media/page_images/Domicilio.png' %}" class = "py-2 px-2" alt="Domicilios">
+                <h2 class="text-center font-semibold text-gray-100">Amigable y Atento</h2>
+                <p class="text-center text-gray-300">Nuestro vendedor virtual siempre te tratará con respeto y te ayudará en todo lo que necesites</p>
+            </div>
+
+            <div class="w-150 p-8 grid justify-items-center">
+                <img src="{% static 'media/page_images/Candado.png' %}" class = "py-2 px-2" alt="Candado">
+                <h2 class="text-center font-semibold text-gray-100">Atención 24 horas</h2>
+                <p class="text-center text-gray-300">Podrás contar con nuestra atención al cliente las 24 horas del día, los 7 días de la semana</p>
+            </div>
+        </footer>
+    </body>
+</html>
