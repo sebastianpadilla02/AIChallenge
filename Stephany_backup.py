@@ -1,6 +1,6 @@
 import google.generativeai as genai
 import textwrap
-from Database import Database
+from BackEnd.Database import Database
 import json
 import os
 

@@ -1,13 +1,12 @@
 import google.generativeai as genai
 import textwrap
-from Database import Database
+from BackEnd.Database import Database
 import json
 import os
 
 class Stephany2:
 
-    def _init_(self, api_key, db_config, history_file='chat_employees_history.json'):
-        self.first = True
+    def __init__(self, api_key, db_config, history_file='chat_employees_history.json'):
         self.api_key = api_key
         self.db = Database(db_config)
         self.history_file = history_file
@@ -73,18 +72,7 @@ class Stephany2:
 
     # Enviamos un mensaje y recibimos la respuesta
     def send_message(self, message):
-        if self.first:
-            # Extraemos la información relevante de la base de datos
-            context = self.get_context()
-            # Decirle que no se salga del contexto
-            
-
-            # Incluimos el contexto en el mensaje
-            full_message = f"{context}\n\n{message}"
-            self.first = False
-        else:
-            #full_message = "\n".join([f"User: {entry['user']}\nGemini: {entry['gemini']}" for entry in self.history])
-            full_message = f"\nUser: {message}"
+        full_message = f"\nUser: {message}"
 
         try:
             # Enviamos el mensaje a Gemini

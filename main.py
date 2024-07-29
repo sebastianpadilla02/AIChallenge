@@ -1,5 +1,5 @@
-from Stephany import Stephany
-from Stephany_Employees import Stephany2
+from BackEnd.Stephany import Stephany
+from BackEnd.Stephany_Employees import Stephany2
 
 api_key = 'AIzaSyDR-yzVIRiFoQqWsdT3tNX2BcR_T4TcAQQ'
 
