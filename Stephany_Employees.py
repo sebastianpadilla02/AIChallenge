@@ -6,7 +6,7 @@ import os
 
 class Stephany2:
 
-    def __init__(self, api_key, db_config, history_file='chat_employees_history.json'):
+    def _init_(self, api_key, db_config, history_file='chat_employees_history.json'):
         self.first = True
         self.api_key = api_key
         self.db = Database(db_config)
@@ -18,8 +18,23 @@ class Stephany2:
         # Configuramos nuestra instancia del modelo con nuestra API key
         genai.configure(api_key=self.api_key)
 
+        querys = [self.get_products, self.get_clients, self.get_orders, self.get_employees]
+
+        context_luthymakeup = (
+            "Hola, voy a usarte como parte de un chatbot para mi negocio de maquillaje llamado LuthyMakeup "
+            "(con sede en Barranquilla, Colombia). En esta sección, solo responderás preguntas y solicitudes relacionadas con los empleados "
+            "de la empresa y la información operativa(incluida la informacion de pedidos, ya que hay empleados que se relacionan directamente con algunos pedidos) que se encuentra en las tablas que te enviaré. Este chat está enfocado en la parte "
+            "operativa de la empresa y sus funcionalidades. "
+
+            "Importante: "
+            "1. Si la pregunta que te hago es ambigua, di: 'Dame más información para darte una respuesta concreta.' "
+            "2. Si la pregunta que te hago no tiene nada que ver con la empresa o el enfoque del chatbot, por favor di: 'No puedo responder a esa pregunta.' "
+
+            "Solo responde preguntas relacionadas con la empresa y la información de las tablas que te proporcionaré"
+        )
+
         # Inicializamos el modelo
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel(model_name='gemini-1.5-flash', system_instruction=context_luthymakeup, tools = querys)
 
         # Formateamos el historial para que esté en el formato correcto
         formatted_history = self.format_history()
@@ -61,29 +76,15 @@ class Stephany2:
         if self.first:
             # Extraemos la información relevante de la base de datos
             context = self.get_context()
-
-            context_luthymakeup = ("Hola, voy a usarte como parte de un chatbot para mi negocio de maquillaje llamado LuthyMakeup")
-            
             # Decirle que no se salga del contexto
-            context_luthymakeup = (
-                "Hola, voy a usarte como parte de un chatbot para mi negocio de maquillaje llamado LuthyMakeup "
-                "(con sede en Barranquilla, Colombia). En esta sección, solo responderás preguntas y solicitudes relacionadas con los empleados "
-                "de la empresa y la información operativa que se encuentra en las tablas que te enviaré. Este chat está enfocado en la parte "
-                "operativa de la empresa y sus funcionalidades. "
-
-                "Importante: "
-                "1. Si la pregunta que te hago es ambigua, di: 'Dame más información para darte una respuesta concreta.' "
-                "2. Si la pregunta que te hago no tiene nada que ver con la empresa o el enfoque del chatbot, por favor di: 'No puedo responder a esa pregunta.' "
-
-                "Solo responde preguntas relacionadas con la empresa y la información de las tablas que te proporcionaré."
-            )
+            
 
             # Incluimos el contexto en el mensaje
-            full_message = f"{context_luthymakeup}\n\n{context}\n\n{message}"
+            full_message = f"{context}\n\n{message}"
             self.first = False
         else:
-            full_message = "\n".join([f"User: {entry['user']}\nGemini: {entry['gemini']}" for entry in self.history])
-            full_message += f"\nUser: {message}"
+            #full_message = "\n".join([f"User: {entry['user']}\nGemini: {entry['gemini']}" for entry in self.history])
+            full_message = f"\nUser: {message}"
 
         try:
             # Enviamos el mensaje a Gemini
@@ -115,23 +116,31 @@ class Stephany2:
 
     # Función para obtener productos
     def get_products(self):
+        """Search for products in the database, their costs, availability, and other relevant information."""
         query = "SELECT * FROM data.Products"
-        return self.db.execute_query(query)
+        result = self.db.execute_query(query)
+        return self.format_table(result)
 
     # Función para obtener clientes
     def get_clients(self):
+        """Search for clients in the database, their contact information, and other relevant information."""
         query = "SELECT * FROM data.Clients"
-        return self.db.execute_query(query)
+        result = self.db.execute_query(query)
+        return self.format_table(result)
 
     # Función para obtener órdenes
     def get_orders(self):
+        """Search for orders in the database, their status, delivery times, and other relevant information."""
         query = "SELECT * FROM data.Orders_2"
-        return self.db.execute_query(query)
+        result = self.db.execute_query(query)
+        return self.format_table(result)
 
     # Función para obtener empleados
     def get_employees(self):
+        """Search for employees in the database, their roles, salaries, and other relevant information."""
         query = "SELECT * FROM data.Employees_3"
-        return self.db.execute_query(query)
+        result = self.db.execute_query(query)
+        return self.format_table(result)
 
     # Función para formatear las tablas en texto plano
     def format_table(self, data):
